@@ -1,0 +1,1216 @@
+﻿html {
+    background: white !important;
+    -ms-touch-action: manipulation;
+    -ms-content-zooming: none !important;
+    /* IE10  */
+    
+    touch-action: manipulation;
+    /* IE11+ */
+}
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-weight: bold !important;
+    font-family: Arial !important;
+    font-stretch: condensed;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    color: white;
+    background: #40140e;
+}
+body {
+    line-height: 1;
+    text-align: center;
+    width: 100%;
+}
+body,
+div,
+span,
+p {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.clear {
+    clear: both;
+}
+#loading {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 10;
+}
+#wrapper {
+    background: #40140e;
+    width: 100%;
+    position: fixed;
+    overflow: hidden;
+}
+img,
+img:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+/* these are DIVs: #wrapper, #scaledViewport, #gameplay, .tool, .register */
+
+html,
+body,
+div,
+span {} #noscript {
+    background-color: black;
+    font-size: large;
+    border: 5px dotted red;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 20px 20px 2000px 20px;
+}
+#noscript a {
+    cursor: help;
+    color: red;
+    text-decoration: none;
+}
+#noscript a:hover {
+    text-decoration: underline;
+}
+/*
+    See:
+    https://developer.mozilla.org/en-US/docs/Web/CSS/transform-origin 
+    https://developer.mozilla.org/en-US/docs/Web/CSS/transform
+*/
+
+#scaledViewport {
+    -moz-transform-origin: 0 0 !important;
+    -ms-transform-origin: 0 0 !important;
+    -o-transform-origin: 0 0 !important;
+    -webkit-transform-origin: 0 0 !important;
+    transform-origin: 0 0 !important;
+    padding: 0;
+    background: linear-gradient(to bottom, #40140e 0, #cd8a5c 50%, #40140e 100%);
+    /* W3C Standard */
+}
+@media (orientation: portrait) {
+    #scaledViewport,
+    #main_menu,
+    #level_pack,
+    #gameplay {
+        width: 768px;
+        height: 1024px;
+    }
+    #controls {
+        width: 768px;
+    }
+    #toolbox {
+        float: right;
+    }
+    #play {
+        position: relative;
+        top: -85px;
+    }
+    .landscape_only {
+        display: none !important;
+    }
+}
+@media (orientation: landscape) {
+    #lefthand,
+    #controls {
+        float: left;
+    }
+    #controls {
+        width: 470px;
+        margin-left: 20px;
+    }
+    #play {
+        position: relative;
+        left: +150px;
+        top: -85px;
+    }
+    #scaledViewport,
+    #main_menu,
+    #level_pack,
+    #gameplay {
+        width: 1280px;
+        height: 660px;
+    }
+    .protrait_only {
+        display: none !important;
+    }
+}
+#loading {
+    text-transform: uppercase;
+    color: #d3a485;
+    margin: auto;
+    background-color: #fae0bb;
+    background: linear-gradient(to bottom, #fae0bb 0%, #988 100%);
+    /* W3C Standard */
+}
+#loading p {
+    cursor: progress;
+}
+#progress {
+    border: 5px solid #d3a485;
+    border-radius: 5px;
+    margin: 0 auto;
+}
+#progress div {
+    float: left;
+    -moz-transition-duration: 5s;
+    -o-transition-duration: 5s;
+    -webkit-transition-duration: 5s;
+    transition-duration: 5s;
+    -moz-transition-property: opacity;
+    -o-transition-property: opacity;
+    -webkit-transition-property: opacity;
+    transition-property: opacity;
+    opacity: 0;
+    margin: 5px;
+}
+.full-opacity {
+    opacity: 1 !important;
+}
+.big-crate {
+    position: absolute;
+    -moz-transition: all ease-out 5s;
+    -o-transition: all ease-out 5s;
+    -webkit-transition: all ease-out 5s;
+    transition: all ease-out 5s;
+    opacity: 0.75;
+}
+.clickable_text {
+    font-size: 16px;
+    font-stretch: ultra-condensed;
+    vertical-align: top;
+    opacity: 0.8;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+@media screen and (orientation: landscape) {
+    .clickable_text {
+        font-size: 16px;
+        position: absolute;
+        margin-left: 2%;
+    }
+}
+/***************** CREDITS ******************/
+
+::-webkit-scrollbar {
+    display: none;
+}
+#credits {
+    height: 100% !important;
+}
+#credits_scrollpane {
+    -ms-overflow-style: none;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0 auto;
+    font-size: 16px;
+    line-height: normal;
+    -ms-touch-action: auto;
+    touch-action: auto;
+}
+@media screen and (orientation: landscape) {
+    #credits_scrollpane {
+        font-size: 16px;
+    }
+}
+#credits_scrollpane a {
+    color: white;
+    text-decoration: underline;
+}
+#credits_scrollpane header {
+    font-size: 120%;
+}
+@media (orientation: landscape) {
+    #credits_scrollpane {
+        height: 660px;
+    }
+}
+@media (orientation: portrait) {
+    #credits_scrollpane {
+        height: 990px;
+    }
+}
+#itunes_store {
+    display: inline-block;
+    overflow: hidden;
+    background: url(http://linkmaker.itunes.apple.com/htmlResources/assets/images/web/linkmaker/badge_appstore-lrg.png) no-repeat;
+    background-size: 100% 100% !important;
+    width: 135px;
+    height: 40px;
+}
+/* This is from the "linkmaker". But Opera would not show this correctly.
+@media only screen{
+    #itunes_store {
+        background-image: url(http://linkmaker.itunes.apple.com/htmlResources/assets/images/web/linkmaker/badge_appstore-lrg.svg);
+    }
+}*/
+
+#credits_header {
+    text-align: center;
+    width: 20%;
+    margin-left: 40%;
+    margin-right: 40%;
+}
+#close_credits {
+    /* see also: .clickable_text */
+    
+    transform: none !important;
+    bottom: 10px;
+    float: left;
+}
+@media (orientation: portrait) {
+    #close_credits {
+        margin-left: 5px !important;
+        height: auto;
+    }
+}
+@media(orientation: landscape) {
+    #img_original_credits {
+        width: 95%;
+        height: auto;
+    }
+}
+@media(orientation: portrait) {
+    #img_original_credits {
+        width: 200%;
+        height: auto;
+        margin-left: -50%;
+    }
+}
+.credits_text {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+@media(orientation: portrait) {
+    #original_credits {
+        top: 5%;
+    }
+}
+@media(orientation: landscape) {
+    #original_credits {
+        top: 5px;
+    }
+}
+#original_credits {
+    max-width: 40%;
+    position: relative;
+    margin: auto;
+}
+#credits_links {
+    position: relative;
+    top: 30%;
+    max-width: 60%;
+    height: 30%;
+    padding: 10px;
+    background: white;
+    margin: auto;
+    text-align: center;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    font-size: 20px;
+}
+#credits_links a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    line-height: 200%;
+}
+#show_licenses:checked ~ #third_party pre {
+    display: block;
+}
+#show_licenses + label {
+    font-size: 75%;
+}
+/***************** MAIN MENU (LEVEL PACKS) ******************/
+
+#main_menu {} #show_credits {
+    /* see also: .clickable_text */
+    
+    text-transform: uppercase;
+    cursor: pointer;
+    position: absolute;
+    bottom: 10px;
+    left: 5px;
+    z-index: 1;
+}
+#main_menu header {
+    padding: 10px 0px;
+    width: 100%;
+    text-align: center;
+    font-size: 80px;
+    color: white;
+    white-space: nowrap;
+}
+@media (orientation: landscape) {
+    #main_menu header {}
+}
+@media (orientation: portrait) {
+    #main_menu header {
+        padding-top: 50px;
+    }
+}
+#main_menu_rating,
+#level_pack_rating {
+    position: absolute;
+    /* So that the title ("Level packs") is still centered. */
+    
+    right: 10px;
+    top: 10px;
+    width: 135px;
+    height: 131px;
+    background-image: url(gfx/Star_Filled.png);
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat;
+    font-size: 40px;
+    color: #78381E;
+}
+#main_menu_rating span,
+#level_pack_rating span {
+    position: relative;
+    top: 40px;
+}
+#level_pack {
+    width: 100%;
+}
+#main_menu .level_pack {
+    text-align: center;
+    position: relative;
+    /* original ratio: 512:503 */
+    
+    width: 300px;
+    height: 295px;
+    background-size: 100% 100% !important;
+    cursor: pointer;
+    display: inline-block;
+}
+#main_menu .level_pack > div {
+    position: absolute;
+    top: 10%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+#main_menu img {
+    position: relative;
+    width: 50%;
+    height: 50%;
+    padding-top: 20%;
+}
+#main_menu p {
+    position: relative;
+    top: -15px;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    color: white;
+    font-size: 30px;
+    margin: 0px;
+    overflow: hidden;
+    -ms-text-overflow: clip;
+    -o-text-overflow: ellipsis;
+    text-overflow: clip;
+    white-space: nowrap;
+}
+#pack_tutorial {
+    background-image: url('gfx/Pack_Tutorial.png');
+}
+#pack_easy {
+    background-image: url('gfx/Pack_Easy.png');
+}
+#pack_medium {
+    background-image: url('gfx/Pack_Medium.png');
+}
+#pack_hard {
+    background-image: url('gfx/Pack_Hard.png');
+}
+#pack_crazy {
+    background-image: url('gfx/Pack_Crazy.png');
+}
+#pack_impossible {
+    background-image: url('gfx/Pack_Impossible.png');
+}
+/**************** LEVEL-PACK *****************/
+
+#back_to_main {
+    /* see also: .clickable_text */
+    
+    padding: 10px;
+    position: absolute;
+}
+/* #level_pack_rating is defined together with #main_menu_rating. */
+
+#level_pack_title {
+    width: 100%;
+    text-align: center;
+    font-size: 80px;
+    color: white;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+#go_left,
+#go_right {
+    opacity: 0.5;
+    cursor: pointer;
+}
+#go_left {
+    float: left;
+}
+#go_right {
+    float: right;
+}
+@media (orientation: portrait) {
+    #go_left > img,
+    #go_right > img {
+        width: 30px;
+        height: 40px;
+    }
+    #go_left {
+        margin: 370px 0px 300px 0px;
+        position: relative;
+        left: 5px;
+    }
+    #go_right {
+        margin: 370px 0px 300px 0px;
+        position: relative;
+        left: -5px;
+    }
+    #level_pack_title {
+        padding-top: 80px;
+    }
+}
+@media (orientation: landscape) {
+    #go_left,
+    #go_right {
+        margin: 230px 20px 200px;
+    }
+    #level_pack_title {
+        padding-top: 20px;
+    }
+}
+.level-selector {
+    position: relative;
+    height: 220px;
+    display: inline-block;
+    margin: 5px 0px 30px 0px;
+    cursor: pointer;
+}
+.level-selector > div:first-child {
+    width: 349px;
+    height: 218px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.level-selector > div:first-child > div {
+    width: 300px;
+    height: 125px;
+    text-align: center;
+    color: white;
+    margin: auto;
+    margin-top: 32px;
+    padding-top: 32px;
+    background-color: gray;
+    background: linear-gradient(to bottom, #653323 0%, #40140E 100%);
+    /* W3C Standard */
+}
+.level-selector > div:first-child > div > div {
+    position: absolute;
+    bottom: 30px;
+    width: 300px;
+    z-index: 1;
+}
+.level-title {
+    color: white;
+    font-size: 30px;
+    font-stretch: ultra-condensed;
+}
+.level_formation {
+    margin: auto;
+    width: auto;
+    text-align: center;
+}
+.level_formation > div {
+    display: inline-block;
+}
+.level_formation > div > div {
+    width: 10px;
+    height: 10px;
+    border: 2px solid black;
+    border-bottom-width: 1px;
+    margin: auto;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+}
+.crate_blue {
+    background: rgb(50, 192, 255);
+}
+.crate_yellow {
+    background: rgb(255, 184, 50);
+}
+.crate_red {
+    background: rgb(255, 80, 52);
+}
+.crate_green {
+    background: rgb(124, 228, 40);
+}
+.crate_none {
+    display: none;
+}
+.level_formation > div > div:last-of-type {
+    border-bottom-width: 2px !important;
+}
+.level_formation img {
+    display: block;
+    margin: auto;
+    position: relative;
+    top: -2px;
+}
+/* This is the "Frame" of the level selector: */
+
+.level-selector > div:nth-child(2) {
+    width: 349px;
+    height: 218px;
+    background: url('gfx/Level_Select_Frame.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100% !important;
+    position: relative;
+    top: 0px;
+}
+.level-selector > div:last-child {
+    /* this contains the stars for the rating. */
+}
+/***************** GAMEPLAY ******************/
+
+#level_info {
+    padding-bottom: 20px;
+}
+#level_title {
+    font-size: 40px;
+    white-space: nowrap;
+    text-align: center;
+    color: #dfb3b3;
+    margin: 10px auto;
+    width: 530px;
+    /* 768px - 2*99px - 2*10 - 2*5 = 540px */
+    
+    vertical-align: top;
+}
+.you-got-it {
+    position: absolute;
+    display: none;
+    text-align: center;
+    background-image: url(gfx/Starry_Background.png);
+    background-repeat: repeat;
+    background-size: 256px;
+    z-index: 1000;
+    -moz-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    -moz-transition-property: top;
+    -o-transition-property: top;
+    -webkit-transition-property: top;
+    transition-property: top;
+    animation: animateBackground infinite 7s linear;
+}
+@keyframes animateBackground {
+    from {
+        background-position: 0px 0px;
+    }
+    to {
+        background-position: 250px 250px;
+    }
+}
+#you_got_it_1 {
+    top: 0px;
+    width: 768px;
+    height: 314px;
+}
+#you_got_it_1 p {
+    font-size: 200%;
+    padding: 0px;
+    margin: 20px;
+    text-shadow: -4px 4px 0px #85101d;
+}
+#unknown_solution {
+    color: #00ff30;
+}
+#you_got_it_1 p:first-child {
+    font-size: 500%;
+}
+#you_got_it_2 {
+    /* sized and position depend on orientation! */
+}
+#you_got_it_2 img {
+    margin-top: 40px;
+    cursor: pointer;
+}
+@media (orientation: portrait) {
+    #you_got_it_2 {
+        top: 655px;
+        width: 768px;
+        height: 366px;
+    }
+}
+@media (orientation: landscape) {
+    #you_got_it_2 {
+        top: 0px;
+        left: 768px;
+        width: 512px;
+        height: 660px;
+    }
+}
+#lefthand {
+    width: 768px;
+}
+#goal_title {
+    font-size: 20px;
+    white-space: nowrap;
+    text-align: center;
+    width: 100%;
+    color: white;
+    margin: 5px;
+}
+#goal {
+    width: 400px;
+    height: 200px;
+    border: 2px solid black;
+    border-radius: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    background: #caa;
+}
+#goal > div {
+    position: absolute;
+    width: 400px;
+    height: 200px;
+}
+#goal > div > div {
+    position: absolute;
+    bottom: -4px;
+}
+#goal .level_formation {
+    width: 400px;
+}
+#goal .level_formation > div {
+    text-align: center;
+    width: 40px;
+}
+#goal .level_formation > div > div {
+    width: 16px;
+    height: 16px;
+}
+#animation {
+    width: 768px;
+    height: 315px;
+    border: 3px groove brown;
+}
+#btn_hints,
+#btn_menu_1,
+#level_title {
+    display: inline-block;
+}
+#btn_hints,
+#btn_menu_1 {
+    margin: 5px;
+}
+#btn_menu_1,
+#btn_fast,
+#btn_step,
+#btn_clear {
+    cursor: pointer;
+}
+#btn_clear {
+    float: right;
+    position: relative;
+    left: -20px;
+    top: -8px;
+}
+#btn_hints {
+    cursor: help;
+}
+#btn_fast,
+#btn_step {
+    position: absolute;
+    top: 240px;
+}
+#btn_fast {
+    left: 10px;
+}
+#btn_step {
+    left: 690px;
+}
+.program > div {
+    float: left;
+    margin-bottom: 20px;
+}
+.prog-label,
+.register,
+.tool {
+    width: 50px;
+    /* 50% */
+    
+    height: 54px;
+    /* 50% */
+    
+    background-size: 100% !important;
+    background-repeat: no-repeat !important;
+}
+.prog-label {
+    position: relative;
+    left: 3px;
+}
+.prog-label:before {
+    content: " ";
+    display: block;
+    background: black;
+    width: 44px;
+    height: 46px;
+    /* 50% */
+    
+    opacity: 0.3;
+    position: relative;
+    left: 4px;
+    top: 4px;
+}
+#prog_1_label {
+    background: url('gfx/Program_1.png');
+}
+#prog_2_label {
+    background: url('gfx/Program_2.png');
+}
+#prog_3_label {
+    background: url('gfx/Program_3.png');
+}
+#prog_4_label {
+    background: url('gfx/Program_4.png');
+}
+.register {
+    background: url('gfx/Register_Slot.png');
+}
+/* Condition */
+
+.register div:first-child {
+    background-size: 100% !important;
+    background-repeat: no-repeat !important;
+    content: ' ';
+    display: block;
+    width: 50px !important;
+    /* 50% */
+    
+    height: 54px !important;
+    /* 50% */
+    
+    position: relative;
+    top: -20px;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+}
+/* Operation */
+
+.register div:last-child {
+    background-size: 100% !important;
+    background-repeat: no-repeat !important;
+    content: ' ';
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    top: -54px;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+}
+.current_register div:last-child {
+    -moz-transform: scale(1.2, 1.2) rotate(-5deg) !important;
+    -ms-transform: scale(1.2, 1.2) rotate(-5deg) !important;
+    -o-transform: scale(1.2, 1.2) rotate(-5deg) !important;
+    -webkit-transform: scale(1.2, 1.2) rotate(-5deg) !important;
+    transform: scale(1.2, 1.2) rotate(-5deg) !important;
+}
+/* same as: .program DIV:last-child */
+
+.last-slot {
+    background: url('gfx/Register_Slot_Last.png');
+}
+/*** Tools (exist once in toolbox): ***/
+
+#toolbox {
+    background: url("gfx/Toolbox.png");
+    background-size: 100% 100% !important;
+    width: 265px;
+    height: 300px;
+    padding-left: 30px;
+    padding-top: 50px;
+}
+#toolbox > div {
+    height: 240px;
+    margin: 0;
+}
+.tool {
+    float: left;
+    margin: 3px;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+}
+#tool_right {} #tool_grab {} #tool_left {} #tool_prog1 {} #tool_prog2 {} #tool_prog3 {} #tool_prog4 {} #tool_blue {} #tool_red {} #tool_green {} #tool_yellow {} #tool_empty {} #tool_nonempty {} .program > div > div {
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+.cmd-noop {
+    /* This is used in any empty register. */
+    
+    cursor: default !important;
+    display: none !important;
+}
+.cmd-right {
+    background: url('gfx/Command_Right.png');
+}
+.cmd-grab {
+    background: url('gfx/Command_Grab.png');
+}
+.cmd-left {
+    background: url('gfx/Command_Left.png');
+}
+.cmd-prog1 {
+    background: url('gfx/Program_1.png');
+}
+.cmd-prog2 {
+    background: url('gfx/Program_2.png');
+}
+.cmd-prog3 {
+    background: url('gfx/Program_3.png');
+}
+.cmd-prog4 {
+    background: url('gfx/Program_4.png');
+}
+.cmd-nocond {
+    cursor: default !important;
+}
+.cmd-blue {
+    background: url('gfx/Condition_Blue.png');
+}
+.cmd-red {
+    background: url('gfx/Condition_Red.png');
+}
+.cmd-green {
+    background: url('gfx/Condition_Green.png');
+}
+.cmd-yellow {
+    background: url('gfx/Condition_Yellow.png');
+}
+.cmd-empty {
+    background: url('gfx/Condition_None.png');
+}
+.cmd-nonempty {
+    background: url('gfx/Condition_Any.png');
+}
+#play {
+    width: 165px !important;
+    height: 83px !important;
+    /*
+    background-size: 100% 100% !important;
+    */
+    
+    margin: auto;
+    cursor: pointer;
+}
+#dragImage {
+    z-index: 10000;
+    opacity: 0.9;
+    position: absolute;
+    cursor: -webkit-grabbing;
+    cursor: -moz-grabbing;
+}
+#stage_roof,
+#stage_floor {
+    height: 15px;
+    width: 100%;
+    background-size: 100% 100% !important;
+}
+#stage_roof {
+    background: url(gfx/Game_Area_Roof.png);
+}
+#stage_floor {
+    background: url(gfx/Game_Area_Floor.png);
+    margin-top: 312px;
+}
+#stage > div {
+    background-size: 100% 100% !important;
+    position: absolute;
+}
+#stage {
+    background: url("gfx/Game_Area.png");
+    background-size: 100% 100% !important;
+    width: 768px;
+    height: 312px;
+    position: absolute;
+    overflow: hidden;
+}
+.htmldraw {
+    z-index: 1001;
+}
+.htmlshadow {
+    z-index: 999;
+    opacity: 0.2;
+}
+.hint {
+    position: absolute;
+    width: auto;
+    height: auto;
+    cursor: pointer;
+}
+.hint div.text {
+    position: relative;
+    padding: 0.5em;
+    background: #008aff;
+    border-color: black;
+    border-style: solid;
+    color: white;
+    font-size: 1.5em;
+    text-align: left;
+}
+.hint div.text img {
+    vertical-align: -20%;
+}
+.hint .triangle {
+    background-size: 100% 100% !important;
+    background-repeat: no-repeat;
+    position: relative;
+}
+/* both text and triangle: */
+
+#hint_right div {
+    display: inline-block;
+    vertical-align: top;
+}
+#hint_up .triangle {
+    margin: 0 auto;
+    z-index: 100;
+}
+.smoke {
+    visibility: visible;
+    width: 56px;
+    height: 58px;
+    background: url('gfx/Smoke_Particle.png');
+    -moz-transition: all ease-out 0.5s;
+    -o-transition: all ease-out 0.5s;
+    -webkit-transition: all ease-out 0.5s;
+    transition: all ease-out 0.5s;
+    position: absolute;
+}
+.nosmoke {
+    visibility: hidden;
+    -moz-transition: none;
+    -o-transition: none;
+    -webkit-transition: none;
+    transition: none;
+    position: absolute;
+}
+.modal {
+    position: absolute;
+    z-index: 1;
+    display: none;
+}
+.custom_modal_btn {
+    position: relative;
+    z-index: 3;
+}
+#custom_modal_btn_cancel_div {
+    float: left;
+    padding-left: 5%;
+}
+#custom_modal_btn_clear_div {
+    float: right;
+    padding-right: 5%;
+}
+.custom_modal_text {
+    z-index: 4;
+}
+#custom_modal_btn_cancel_div:active,
+#custom_modal_btn_clear_div:active {
+    padding-right: 5%;
+    padding-left: 5%;
+    padding-top: 0.5%;
+}
+#custom_modal_btn_cancel_div:hover,
+#custom_modal_btn_clear_div:hover,
+#custom_modal_btn_clear_text:hover,
+#custom_modal_btn_cancel_text:hover,
+#custom_modal_btn_cancel:hover,
+#custom_modal_btn_clear:hover {
+    cursor: pointer;
+}
+#custom_modal_btn_clear_text {
+    z-index: 4;
+    position: relative;
+}
+#custom_modal_btn_cancel_text {
+    z-index: 4;
+    position: relative;
+}
+#custom_modal_question {
+    position: absolute;
+    z-index: 5;
+    margin-top: 5%;
+    padding-right: 5%;
+    padding-left: 5%;
+}
+.shake:active {
+    transform: scale(1.1);
+    animation: fadeBig 0.25s 1;
+    z-index: 2;
+}
+.shake {
+    transform: scale(1.0);
+    animation: fadeNormal 0.25s 1;
+}
+.level-selector {
+    transform: scale(1.0);
+    animation: fadeNormal 0.25s 1;
+}
+.level-selector:active {
+    animation: fadeBig 0.25s 1;
+    transform: scale(1.1);
+    z-index: 2;
+}
+.tool {
+    transform: scale(1.0);
+    animation: fadeNormal 0.25s 1;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+}
+.tool:active {
+    animation: fadeBig 0.25s 1;
+    transform: scale(1.1);
+}
+@media (min-width: 1025px) and (min-width: 1281px) {
+    .shake:hover {
+        animation: fadeBig 0.25s 1;
+        transform: scale(1.1);
+    }
+    .level-selector:hover {
+        animation: fadeBig 0.25s 1;
+        transform: scale(1.1);
+        z-index: 2;
+    }
+    .tool:hover {
+        animation: fadeBig 0.25s 1;
+        transform: scale(1.1);
+    }
+}
+@keyframes fadeBig {
+    from {
+        transform: scale(1.0);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+@keyframes fadeNormal {
+    from {
+        transform: scale(1.1);
+    }
+    to {
+        transform: scale(1.0);
+    }
+}
+#cargo-bot-logo,
+#cargo-bot-logo-text {
+    width: 60vw !important;
+    font-size: 60px !important;
+}
+@media (orientation: portrait) {
+    #cargo-bot-logo,
+    #cargo-bot-logo-text {
+        margin-top: 30%;
+    }
+}
+@media (orientation: landscape) {
+    #cargo-bot-logo,
+    #cargo-bot-logo-text {
+        margin-top: 5%;
+    }
+}
+@media (orientation: landscape) {
+    #sliding_elements {
+        position: absolute !important;
+        max-width: 90%;
+        min-width: 90%;
+        margin-left: 5%;
+    }
+}
+@media (orientation: portrait) {
+    #sliding_elements {
+        position: absolute !important;
+        margin-left: 0% !important;
+        max-width: 100%;
+        min-width: 100%;
+    }
+    #go_left {
+        display: none !important;
+    }
+    #go_right {
+        display: none !important;
+    }
+}
+#sound_settings #sound {
+    background-image: url('gfx/sound_enabled.png');
+    background-size: cover;
+}
+#sound_settings #music {
+    background-image: url('gfx/music_enabled.png');
+    background-size: cover;
+}
+@media(orientation: landscape) {
+    #sound_settings {
+        position: absolute;
+        right: 30px;
+        top: 150px;
+        width: 100px;
+        height: 240px;
+    }
+    #sound_settings #sound {
+        height: 100px;
+        width: 100px;
+        cursor: pointer;
+    }
+    #sound_settings #music {
+        height: 100px;
+        width: 100px;
+        margin-top: 30px;
+        cursor: pointer;
+    }
+}
+@media(orientation: portrait) {
+    #sound_settings {
+        position: absolute;
+        left: 10px;
+        top: 40px;
+        width: 150px;
+        height: 75px;
+    }
+    #sound_settings #sound {
+        width: 70px;
+        height: 70px;
+        float: right;
+        cursor: pointer;
+    }
+    #sound_settings #music {
+        width: 70px;
+        height: 70px;
+        float: left;
+        cursor: pointer;
+    }
+}

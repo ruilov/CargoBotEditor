@@ -1,0 +1,1 @@
+tsc --target ES3 --module amd --sourceMap --outDir build/ --outFile build/cb.js *.ts
