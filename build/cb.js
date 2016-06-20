@@ -2012,7 +2012,7 @@ var dataSaver;
             throw new Error("This key wasn't found in the list: " + key);
         window.localStorage.setItem(key, data);
         WinJS.Application.roaming.writeText(key, data).then(function (data) {
-            console.info('saved data');
+            // console.info('saved data');
         });
     }
     dataSaver.saveData = saveData;
@@ -3726,10 +3726,9 @@ function loadCargoBot() {
     WinJS.Navigation.history.backStack.push({
         state: 1
     }, "Main", "?state=1");
-    history.pushState = function (arg) {
-        console.log(["tried to push state", arg]);
-    };
-    console.log(history);
+    // history.pushState = function(arg) {
+    //     console.log(["tried to push state", arg]);
+    // }
     history.pushState({
         state: 1
     }, "Main", "?state=1");

@@ -121,7 +121,7 @@ module dataSaver {
             throw new Error("This key wasn't found in the list: " + key)
         window.localStorage.setItem(key, data)
         WinJS.Application.roaming.writeText(key, data).then(function (data) {
-            console.info('saved data');
+            // console.info('saved data');
         });
     }
 

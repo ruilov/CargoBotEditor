@@ -115,9 +115,9 @@ function loadCargoBot() {
         state: 1
     }, "Main", "?state=1")
 
-    history.pushState = function(arg) {
-        console.log(["tried to push state", arg]);
-    }
+    // history.pushState = function(arg) {
+    //     console.log(["tried to push state", arg]);
+    // }
 
     history.pushState({
         state: 1
