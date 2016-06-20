@@ -295,6 +295,8 @@ module level {
     export var CRAZY: ILevelPack = new LevelPack('crazy');
     export var IMPOSSIBLE: ILevelPack = new LevelPack('impossible');
     export var BONUS: ILevelPack = new LevelPack('bonus');
+    export var EDITOR: ILevelPack = new LevelPack('editor');
+
     var draggingElement = () => {
             var elemClassList = document.getElementById('dragImage').className.split(/\s+/);
             for (var i = 0; i < elemClassList.length; i++) {
@@ -1542,5 +1544,21 @@ module level {
             [],
             [yellow, red]
         ] // goal formation
+    );
+    export var THE_EDITOR: ILevel = new Level('Level Editor', // Title of the level
+      EDITOR, // Level's pack
+      1, // Start platform of the grappler 
+      [20, 14, 11], // Rating
+      BASE_TOOLS.concat(red, yellow, empty, nonempty), // available tools
+      [
+        [yellow, red],
+        [],
+        [red, yellow]
+      ], // start formation
+      [
+        [red, yellow],
+        [],
+        [yellow, red]
+      ] // goal formation
     );
 }

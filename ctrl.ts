@@ -26,12 +26,18 @@ module ctrl {
             _view.setClickHandler((e) => {
                 var target = <HTMLDivElement>e.target;
                 if (e.target === undefined) target = <HTMLDivElement>e.srcElement;
-                while (target.id.indexOf("pack_") != 0)
+                while (target.id.indexOf("pack_") != 0 && target.id != "editor_go")
                     target = <HTMLDivElement>target.parentElement;
                 var nr: number = parseInt(target.attributes['data-nr'].value);
                 var pack: level.ILevelPack = level[target.attributes['data-pack'].value];
                 _model.setLevelPack(pack); // This invoces the observer-function below.
                 view.switchTo(view.LEVEL_PACK);
+
+                if (target.id == "editor_go") {
+                    var l = _model.getLevelPack().getLevel(0);
+                    _model.setLevel(l);
+                    view.switchTo(view.GAMEPLAY);
+                }
             });
             var setStars = function () {
                 var allTotals = 0
@@ -110,6 +116,8 @@ module ctrl {
                     for (var i = 0; i < 6; i++) {
                         // console.log(us.getLevelPack().getIdName())
                         if (i > 2 && us.getLevelPack().getIdName() == 'bonus')
+                            return;
+                        if (i > 0 && us.getLevelPack().getIdName() == 'editor')
                             return;
                         var rating = _model.getRating(us.getLevelPack().getLevel(i))
                         total += rating

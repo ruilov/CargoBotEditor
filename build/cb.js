@@ -1365,12 +1365,17 @@ var ctrl;
                 var target = e.target;
                 if (e.target === undefined)
                     target = e.srcElement;
-                while (target.id.indexOf("pack_") != 0)
+                while (target.id.indexOf("pack_") != 0 && target.id != "editor_go")
                     target = target.parentElement;
                 var nr = parseInt(target.attributes['data-nr'].value);
                 var pack = level[target.attributes['data-pack'].value];
                 _model.setLevelPack(pack); // This invoces the observer-function below.
                 view.switchTo(view.LEVEL_PACK);
+                if (target.id == "editor_go") {
+                    var l = _model.getLevelPack().getLevel(0);
+                    _model.setLevel(l);
+                    view.switchTo(view.GAMEPLAY);
+                }
             });
             var setStars = function () {
                 var allTotals = 0;
@@ -1449,6 +1454,8 @@ var ctrl;
                     for (var i = 0; i < 6; i++) {
                         // console.log(us.getLevelPack().getIdName())
                         if (i > 2 && us.getLevelPack().getIdName() == 'bonus')
+                            return;
+                        if (i > 0 && us.getLevelPack().getIdName() == 'editor')
                             return;
                         var rating = _model.getRating(us.getLevelPack().getLevel(i));
                         total += rating;
@@ -1952,7 +1959,8 @@ var dataSaver;
             CountInBinary: "Count in Binary",
             PartingTheSea: "Parting the Sea",
             TheTrick: "The Trick",
-            Equalizer: "Equalizer"
+            Equalizer: "Equalizer",
+            TheEditor: "Level Editor"
         },
         ratings: {
             tutorials: "rating[tutorials]",
@@ -1961,7 +1969,8 @@ var dataSaver;
             hard: "rating[hard]",
             crazy: "rating[crazy]",
             impossible: "rating[impossible]",
-            bonus: "rating[bonus]"
+            bonus: "rating[bonus]",
+            editor: "rating[editor]"
         }
     };
     dataSaver.counter = 0;
@@ -2301,6 +2310,7 @@ var level;
     level.CRAZY = new LevelPack('crazy');
     level.IMPOSSIBLE = new LevelPack('impossible');
     level.BONUS = new LevelPack('bonus');
+    level.EDITOR = new LevelPack('editor');
     var draggingElement = function () {
         var elemClassList = document.getElementById('dragImage').className.split(/\s+/);
         for (var i = 0; i < elemClassList.length; i++) {
@@ -3603,6 +3613,22 @@ var level;
     );
     level.THE_TRICK = new Level('The Trick', // Title of the level
     level.BONUS, // Level's pack
+    1, // Start platform of the grappler 
+    [20, 14, 11], // Rating
+    BASE_TOOLS.concat(red, yellow, empty, nonempty), // available tools
+    [
+        [yellow, red],
+        [],
+        [red, yellow]
+    ], // start formation
+    [
+        [red, yellow],
+        [],
+        [yellow, red]
+    ] // goal formation
+    );
+    level.THE_EDITOR = new Level('Level Editor', // Title of the level
+    level.EDITOR, // Level's pack
     1, // Start platform of the grappler 
     [20, 14, 11], // Rating
     BASE_TOOLS.concat(red, yellow, empty, nonempty), // available tools
@@ -6213,6 +6239,7 @@ var view;
             this.pack_hard = null;
             this.pack_crazy = null;
             this.pack_impossible = null;
+            this.editor_go = null;
         }
         MainMenuBinding.prototype.bind = function () {
             _super.prototype.bind.call(this);
@@ -6250,6 +6277,9 @@ var view;
                     _this.callback(e);
                 };
             });
+            this.binding.editor_go.onclick = function (e) {
+                _this.callback(e);
+            };
             // translation:
             shims.setTextContent(this.binding.main_menu_header, translate.main_menu.getText('level packs'));
             var click2play = translate.main_menu.getText('click2play');

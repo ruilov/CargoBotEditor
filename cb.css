@@ -378,6 +378,14 @@ span {} #noscript {
 #level_pack {
     width: 100%;
 }
+#main_menu #editor_go {
+    position: absolute;
+    right: 20px;
+    top: 380px;
+    width: 130px;
+    height: 130px;
+    cursor: pointer;
+}
 #main_menu .level_pack {
     text-align: center;
     position: relative;

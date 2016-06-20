@@ -150,6 +150,8 @@ module view {
         public pack_crazy: HTMLDivElement = null
         public pack_impossible: HTMLDivElement = null
 
+        public editor_go: HTMLDivElement = null
+
         public getStar(pack: number): HTMLImageElement {
             return <HTMLImageElement>this.getPacks()[pack].querySelector('img')
         }
@@ -207,6 +209,10 @@ module view {
                     this.callback(e)
                 }
             });
+
+            this.binding.editor_go.onclick = (e: MouseEvent) => {
+                this.callback(e);
+            }
 
             // translation:
 

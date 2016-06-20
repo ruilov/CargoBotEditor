@@ -55,7 +55,8 @@ module dataSaver {
             CountInBinary: "Count in Binary",
             PartingTheSea: "Parting the Sea",
             TheTrick: "The Trick",
-            Equalizer: "Equalizer"
+            Equalizer: "Equalizer",
+            TheEditor: "Level Editor"
         },
         ratings: {
             tutorials: "rating[tutorials]",
@@ -64,7 +65,8 @@ module dataSaver {
             hard: "rating[hard]",
             crazy: "rating[crazy]",
             impossible: "rating[impossible]",
-            bonus: "rating[bonus]"
+            bonus: "rating[bonus]",
+            editor: "rating[editor]"
         }
     };
     export var keysArray: String[]
