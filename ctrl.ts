@@ -108,7 +108,7 @@ module ctrl {
                     _view.setLevelPack(us.getLevelPack());
                     var total = 0
                     for (var i = 0; i < 6; i++) {
-                        console.log(us.getLevelPack().getIdName())
+                        // console.log(us.getLevelPack().getIdName())
                         if (i > 2 && us.getLevelPack().getIdName() == 'bonus')
                             return;
                         var rating = _model.getRating(us.getLevelPack().getLevel(i))
