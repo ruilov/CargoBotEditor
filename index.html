@@ -1,1 +1,427 @@
-Hello
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' *; script-src *; style-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src *; connect-src *; font-src 'self'" />
+
+    <title>Cargo-Bot</title>
+    <link rel="stylesheet" href="cb.css" type="text/css" />
+    <!--base.js has to be over box2dwebjs-->
+    <script type="text/javascript" src="lib/base.js" defer="defer"></script>
+    <script type="text/javascript" src="lib/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="lib/Box2dWeb-2.1.a.3.js" defer="defer"></script>
+    <script type="text/javascript" src="build/cb.js" defer="defer"></script>
+
+    <meta name="viewport" content="initial-scale=1, width=device-width, height=device-height, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <meta name="msapplication-TileColor" content="#123456" />
+    <meta name="msapplication-TileImage" content="gfx/Logo.png" />
+    <link rel="shortcut icon" href="gfx/favicon.ico" />
+</head>
+
+<body>
+    <div id="custom_modal" class="modal">
+        <div id="custom_modal_question">
+            <p>Bist du sicher dass du alles löschen willst?</p>
+        </div>
+        <img id="custom_modal_img" src="gfx/Dialogue_Box.png" />
+        <div id="sub_custom_modal" class="sub_modal">
+            <div class="custom_modal_div" id="custom_modal_btn_cancel_div">
+                <img id="custom_modal_btn_cancel" class="custom_modal_btn" src="gfx/Dialogue_Box.png" />
+                <p id="custom_modal_btn_cancel_text" class="custom_modal_text">CANCEL</p>
+            </div>
+            <div class="custom_modal_div" id="custom_modal_btn_clear_div">
+                <img id="custom_modal_btn_clear" class="custom_modal_btn" src="gfx/Dialogue_Box.png" />
+                <p id="custom_modal_btn_clear_text" class="custom_modal_text">CLEAR</p>
+            </div>
+        </div>
+    </div>
+    <div id="loading" style="cursor: progress;">
+        <img class="big-crate" src="gfx/Crate_Yellow_3.png" alt="crate" width="120" height="120" style="display:none" />
+        <img class="big-crate" src="gfx/Crate_Red_1.png" alt="crate" width="120" height="120" style="display:none" />
+        <img class="big-crate" src="gfx/Crate_Blue_2.png" alt="crate" width="120" height="120" style="display:none" />
+        <img class="big-crate" src="gfx/Crate_Green_1.png" alt="crate" width="120" height="120" style="display:none" />
+        <img class="big-crate" src="gfx/Crate_Red_3.png" alt="crate" width="120" height="120" style="display:none" />
+        <img class="big-crate" src="gfx/Crate_Blue_3.png" alt="crate" width="120" height="120" style="display:none" />
+        <img class="big-crate" src="gfx/Crate_Green_2.png" alt="crate" width="120" height="120" style="display:none" />
+        <span id="cargo-bot-logo-text" style="color:black; font-size:50px; font-weight:bold;"><br /><br />CARGO-BOT</span>
+        <img id="cargo-bot-logo" src="gfx/Cargo-Bot.png" alt="Cargo-Bot" style="display:none;" />
+        <p id="status">Loading</p>
+        <div id="progress" style="width: 250px; background:#d3a485;">
+            <div style="opacity:0;">
+                <img src="gfx/Crate_Yellow_1.png" alt="20%" width="40" height="40" style="background: #E1A13D" />
+            </div>
+            <div style="opacity:0;">
+                <img src="gfx/Crate_Red_2.png" alt="40%" width="40" height="40" style="background: #F95338" />
+            </div>
+            <div style="opacity:0;">
+                <img src="gfx/Crate_Blue_1.png" alt="60%" width="40" height="40" style="background: #2EA6E7" />
+            </div>
+            <div style="opacity:0;">
+                <img src="gfx/Crate_Green_3.png" alt="80%" width="40" height="40" style="background: #74CD36" />
+            </div>
+            <div style="opacity:0;">
+                <img src="gfx/Crate_Yellow_2.png" alt="100%" width="40" height="40" style="background: #E1A13D" />
+            </div>
+            <br class="clear" />
+        </div>
+        <p id="click2start" style="visibility:hidden">Click to start the game.</p>
+        <br />
+        <br />
+    </div>
+    <div id="wrapper">
+        <div id="scaledViewport">
+            <div id="credits" style="display:none;">
+                <div id="credits_scrollpane" style="overflow: hidden !important;">
+                    <div id="original_credits" style="display: none;">
+                        <a href="http://twolivesleft.com/CargoBot/" target="_blank">
+                            <img id="img_original_credits" src="gfx/Original_Credits.png" alt="Credits from the original game: A game by Rui Viana. With music by Fred Bogg and art by Simeon." />
+                        </a>
+                    </div>
+                    <div id="credits_links">
+                        <a id="link_fhnw" href="http://www.fhnw.ch/technik/i4ds" target="_blank">
+                            Portiert im Institut f&uuml;r 4D-Technologien der FHNW von Claude Martin und Orell B&uuml;hler<br /><br />
+                            <img src="gfx/FHNW.jpg" alt="FHNW Logo" width="300" /><br />
+                        </a>
+                    </div>
+                </div>
+                <div id="close_credits" class="clickable_text">
+                    <span>
+                    </span>
+                </div>
+            </div>
+            <div id="main_menu" style="display:none">
+                <div id="main_menu_rating">
+                    <span>0</span>
+                </div>
+                <div id="sound_settings">
+                    <div id="sound">
+                    </div>
+                    <div id="music">
+                    </div>
+                </div>
+                <div id="show_credits" class="clickable_text"></div>
+                <header id="main_menu_header">Level Packs</header>
+                <div id="pack_tutorial" class="level_pack" data-nr="0" data-pack="TUTORIALS">
+                    <div>
+                        <img src="gfx/Star_Empty.png" width="135" height="131" alt="*" />
+                        <p>Click to Play</p>
+                    </div>
+                </div>
+                <div id="pack_easy" class="level_pack" data-nr="1" data-pack="EASY">
+                    <div>
+                        <img src="gfx/Star_Empty.png" width="135" height="131" alt="*" />
+                        <p>Click to Play</p>
+                    </div>
+                </div>
+                <br class="protrait_only" />
+                <div id="pack_medium" class="level_pack" data-nr="2" data-pack="MEDIUM">
+                    <div>
+                        <img src="gfx/Star_Empty.png" width="135" height="131" alt="*" />
+                        <p>Click to Play</p>
+                    </div>
+                </div>
+                <br class="landscape_only" />
+                <div id="pack_hard" class="level_pack" data-nr="3" data-pack="HARD">
+                    <div>
+                        <img src="gfx/Star_Empty.png" width="135" height="131" alt="*" />
+                        <p>Click to Play</p>
+                    </div>
+                </div>
+                <br class="protrait_only" />
+                <div id="pack_crazy" class="level_pack" data-nr="4" data-pack="CRAZY">
+                    <div>
+                        <img src="gfx/Star_Empty.png" width="135" height="131" alt="*" />
+                        <p>Click to Play</p>
+                    </div>
+                </div>
+                <div id="pack_impossible" class="level_pack" data-nr="5" data-pack="IMPOSSIBLE">
+                    <div>
+                        <img src="gfx/Star_Empty.png" width="135" height="131" alt="*" />
+                        <p>Click to Play</p>
+                    </div>
+                </div>
+            </div>
+            <div id="level_pack" style="display:none">
+                <div id="back_to_main" class="clickable_text">
+                    <span>BACK</span>
+                </div>
+                <div id="level_pack_rating">
+                    <span>0</span>
+                </div>
+                <header id="level_pack_title">
+                    TITLE
+                </header>
+                <div id="go_left">
+                    <img alt="&larr;" src="gfx/Arrow_Left.png" width="41" height="34" />
+                </div>
+                <div id="go_right">
+                    <img alt="&rarr;" src="gfx/Arrow_Right.png" width="41" height="34" />
+                </div>
+                <div id="sliding_elements">
+                    <div id="level_0" class="level-selector" data-nr="0">
+                        <div>
+                            <div>
+                                <span class="level-title">Title of Level</span>
+                                <div>
+                                    <div class="level_formation">
+                                        <div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <img src="gfx/Platform.png" width="32" height="8" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                        <div>
+                            <img class="star" src="gfx/Star_Empty.png" width="38" height="37" alt="*" />
+                            <img class="star" src="gfx/Star_Empty.png" width="38" height="37" alt="*" />
+                            <img class="star" src="gfx/Star_Empty.png" width="38" height="37" alt="*" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="gameplay" style="display:none">
+                <div id="you_got_it_1" class="you-got-it">
+                    <p id="you_got_it_title">YOU GOT IT</p>
+                    <img id="star_1" src="gfx/Star_Filled.png" alt="*" width="95" height="92" />
+                    <img id="star_2" src="gfx/Star_Empty.png" alt="*" width="95" height="92" />
+                    <img id="star_3" src="gfx/Star_Empty.png" alt="*" width="95" height="92" />
+                    <p id="shortest_solution" style="display:none;">You found the shortest solution!</p>
+                    <p id="unknown_solution" style="display:none;">
+                        Congratulations, you found
+                        <br />an unknown solution.
+                    </p>
+                </div>
+                <div id="lefthand">
+                    <div id="level_info">
+                        <img id="btn_menu_1" src="gfx/Menu_Game_Button.png" width="99" height="48" alt="&larr; menu" />
+                        <div id="level_title">TITLE</div>
+                        <img id="btn_hints" src="gfx/Hints_Button.png" width="99" height="48" alt="hints" />
+                        <br style="clear:both;" />
+                        <div id="goal_title">GOAL</div>
+                        <img id="btn_fast" src="gfx/Fast_Button_Inactive.png" width="66" height="32" alt="fast" />
+                        <img id="btn_step" src="gfx/Step_Button.png" width="66" height="32" alt="step" />
+                        <div id="goal" data-nr="0">
+                            <div>
+                                <div>
+                                    <div class="level_formation">
+                                        <div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <img src="gfx/Platform.png" width="32" height="6" alt="" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="stage_roof"></div>
+                    <div id="stage"></div>
+                    <div id="stage_floor"></div>
+                    <canvas id="canvas" width="768" height="312" style="margin-top: 333px;border:1px solid gold; display:none;"></canvas>
+                    <br style="clear:both;" />
+                </div>
+                <div id="you_got_it_2" class="you-got-it">
+                    <img id="btn_next" alt="Next" src="gfx/Next_Button.png" width="156" height="52" />
+                    <br />
+                    <img id="btn_replay" alt="Next" src="gfx/Replay_Button.png" width="199" height="58" />
+                    <br />
+                    <img id="btn_menu_2" alt="Next" src="gfx/Menu_Button.png" width="174" height="51" />
+                </div>
+                <div id="controls">
+                    <div id="toolbox">
+                        <div>
+                            <div data-cmd-id="right" id="tool_right" class="tool cmd-right"></div>
+                            <div data-cmd-id="grab" id="tool_grab" class="tool cmd-grab"></div>
+                            <div data-cmd-id="left" id="tool_left" class="tool cmd-left"></div>
+                            <div data-cmd-id="prog1" id="tool_prog1" class="tool cmd-prog1"></div>
+                            <div data-cmd-id="prog2" id="tool_prog2" class="tool cmd-prog2"></div>
+                            <div data-cmd-id="prog3" id="tool_prog3" class="tool cmd-prog3"></div>
+                            <div data-cmd-id="prog4" id="tool_prog4" class="tool cmd-prog4"></div>
+                            <div data-cmd-id="blue" id="tool_blue" class="tool cmd-blue"></div>
+                            <div data-cmd-id="red" id="tool_red" class="tool cmd-red"></div>
+                            <div data-cmd-id="green" id="tool_green" class="tool cmd-green"></div>
+                            <div data-cmd-id="yellow" id="tool_yellow" class="tool cmd-yellow"></div>
+                            <div data-cmd-id="empty" id="tool_empty" class="tool cmd-empty"></div>
+                            <div data-cmd-id="nonempty" id="tool_nonempty" class="tool cmd-nonempty"></div>
+                        </div>
+                        <img id="btn_clear" class="clear" alt="clear" src="gfx/Clear_Button.png" width="96" height="47" />
+                    </div>
+                    <br class="clear landscape_only" />
+                    <div id="prog_1" class="program">
+                        <div id="prog_1_label" class="prog-label"></div>
+                        <div id="reg_1_0" data-prog="1" data-reg="0" class="register">
+                            <div id="cond_1_0"></div>
+                            <div id="op_1_0"></div>
+                        </div>
+                        <div id="reg_1_1" data-prog="1" data-reg="1" class="register">
+                            <div id="cond_1_1"></div>
+                            <div id="op_1_1"></div>
+                        </div>
+                        <div id="reg_1_2" data-prog="1" data-reg="2" class="register">
+                            <div id="cond_1_2"></div>
+                            <div id="op_1_2"></div>
+                        </div>
+                        <div id="reg_1_3" data-prog="1" data-reg="3" class="register">
+                            <div id="cond_1_3"></div>
+                            <div id="op_1_3"></div>
+                        </div>
+                        <div id="reg_1_4" data-prog="1" data-reg="4" class="register">
+                            <div id="cond_1_4"></div>
+                            <div id="op_1_4"></div>
+                        </div>
+                        <div id="reg_1_5" data-prog="1" data-reg="5" class="register">
+                            <div id="cond_1_5"></div>
+                            <div id="op_1_5"></div>
+                        </div>
+                        <div id="reg_1_6" data-prog="1" data-reg="6" class="register">
+                            <div id="cond_1_6"></div>
+                            <div id="op_1_6"></div>
+                        </div>
+                        <div id="reg_1_7" data-prog="1" data-reg="7" class="register last-slot">
+                            <div id="cond_1_7"></div>
+                            <div id="op_1_7"></div>
+                        </div>
+                    </div>
+                    <br style="clear:left;" />
+                    <div id="prog_2" class="program">
+                        <div id="prog_2_label" class="prog-label"></div>
+                        <div id="reg_2_0" data-prog="2" data-reg="0" class="register">
+                            <div id="cond_2_0"></div>
+                            <div id="op_2_0"></div>
+                        </div>
+                        <div id="reg_2_1" data-prog="2" data-reg="1" class="register">
+                            <div id="cond_2_1"></div>
+                            <div id="op_2_1"></div>
+                        </div>
+                        <div id="reg_2_2" data-prog="2" data-reg="2" class="register">
+                            <div id="cond_2_2"></div>
+                            <div id="op_2_2"></div>
+                        </div>
+                        <div id="reg_2_3" data-prog="2" data-reg="3" class="register">
+                            <div id="cond_2_3"></div>
+                            <div id="op_2_3"></div>
+                        </div>
+                        <div id="reg_2_4" data-prog="2" data-reg="4" class="register">
+                            <div id="cond_2_4"></div>
+                            <div id="op_2_4"></div>
+                        </div>
+                        <div id="reg_2_5" data-prog="2" data-reg="5" class="register">
+                            <div id="cond_2_5"></div>
+                            <div id="op_2_5"></div>
+                        </div>
+                        <div id="reg_2_6" data-prog="2" data-reg="6" class="register">
+                            <div id="cond_2_6"></div>
+                            <div id="op_2_6"></div>
+                        </div>
+                        <div id="reg_2_7" data-prog="2" data-reg="7" class="register last-slot">
+                            <div id="cond_2_7"></div>
+                            <div id="op_2_7"></div>
+                        </div>
+                    </div>
+                    <br style="clear:left;" />
+                    <div id="prog_3" class="program">
+                        <div id="prog_3_label" class="prog-label"></div>
+                        <div id="reg_3_0" data-prog="3" data-reg="0" class="register">
+                            <div id="cond_3_0"></div>
+                            <div id="op_3_0"></div>
+                        </div>
+                        <div id="reg_3_1" data-prog="3" data-reg="1" class="register">
+                            <div id="cond_3_1"></div>
+                            <div id="op_3_1"></div>
+                        </div>
+                        <div id="reg_3_2" data-prog="3" data-reg="2" class="register">
+                            <div id="cond_3_2"></div>
+                            <div id="op_3_2"></div>
+                        </div>
+                        <div id="reg_3_3" data-prog="3" data-reg="3" class="register">
+                            <div id="cond_3_3"></div>
+                            <div id="op_3_3"></div>
+                        </div>
+                        <div id="reg_3_4" data-prog="3" data-reg="4" class="register">
+                            <div id="cond_3_4"></div>
+                            <div id="op_3_4"></div>
+                        </div>
+                        <div id="reg_3_5" data-prog="3" data-reg="5" class="register">
+                            <div id="cond_3_5"></div>
+                            <div id="op_3_5"></div>
+                        </div>
+                        <div id="reg_3_6" data-prog="3" data-reg="6" class="register">
+                            <div id="cond_3_6"></div>
+                            <div id="op_3_6"></div>
+                        </div>
+                        <div id="reg_3_7" data-prog="3" data-reg="7" class="register last-slot">
+                            <div id="cond_3_7"></div>
+                            <div id="op_3_7"></div>
+                        </div>
+                    </div>
+                    <br style="clear:left;" />
+                    <div id="prog_4" class="program">
+                        <div id="prog_4_label" class="prog-label"></div>
+                        <div id="reg_4_0" data-prog="4" data-reg="0" class="register">
+                            <div id="cond_4_0"></div>
+                            <div id="op_4_0"></div>
+                        </div>
+                        <div id="reg_4_1" data-prog="4" data-reg="1" class="register">
+                            <div id="cond_4_1"></div>
+                            <div id="op_4_1"></div>
+                        </div>
+                        <div id="reg_4_2" data-prog="4" data-reg="2" class="register">
+                            <div id="cond_4_2"></div>
+                            <div id="op_4_2"></div>
+                        </div>
+                        <div id="reg_4_3" data-prog="4" data-reg="3" class="register">
+                            <div id="cond_4_3"></div>
+                            <div id="op_4_3"></div>
+                        </div>
+                        <div id="reg_4_4" data-prog="4" data-reg="4" class="register last-slot">
+                            <div id="cond_4_4"></div>
+                            <div id="op_4_4"></div>
+                        </div>
+                    </div>
+                    <br class="clear" />
+                    <img id="play" src="gfx/Play_Button.png" width="165" height="83" alt="play/stop" />
+                </div>
+                <br style="clear:both;" />
+            </div>
+            <br style="clear:both;" />
+        </div>
+        <div id="smoke1" class="nosmoke">&nbsp;</div>
+        <div id="smoke2" class="nosmoke">&nbsp;</div>
+        <div id="smoke3" class="nosmoke">&nbsp;</div>
+        <div id="smoke4" class="nosmoke">&nbsp;</div>
+        <div id="smoke5" class="nosmoke">&nbsp;</div>
+        <div id="smoke6" class="nosmoke">&nbsp;</div>
+        <div id="hint_right" class="hint" style="display: none">
+            <div class="text">hint right: text goes here.</div>
+            <div class="triangle"></div>
+        </div>
+        <div id="hint_down" class="hint" style="display: none">
+            <div class="text">hint down: text goes here.</div>
+            <div class="triangle"></div>
+        </div>
+        <div id="hint_up" class="hint" style="display: none">
+            <div class="triangle"></div>
+            <div class="text">hint up: text goes here.</div>
+        </div>
+        <div id="hint_level" class="hint" style="display: none">
+            <div class="text">hint level: text goes here.</div>
+        </div>
+        <div id="dragImage" class="tool" style="display:none; left:-100px; top:-100px;"></div>
+    </div>
+</body>
+
+</html>
