@@ -36,6 +36,8 @@ module level {
         fireEvent(event: Event);
         /** The next level. Or the first if all have been won. */
         getNextLevel(): ILevel;
+        /** modifies this level by adding a new crate of given color to the top of the platform **/
+        addToPlatform(platform: number, color: string);
     }
     export interface IRating {
         /** Returns the number of stars (1 to 4). 
@@ -226,6 +228,11 @@ module level {
             var index = list.indexOf(this)
             return list[index + 1]
         }
+
+        /** modifies this level by adding a new crate of given color to the top of the platform **/
+        addToPlatform(platform: number, color: string) {
+            this.stage[platform].push(color);
+        }
     }
     var _packs: ILevelPack[] = new Array();
     export interface ILevelPack { //immutable
@@ -284,9 +291,14 @@ module level {
     var right = 'right';
     var grab = 'grab';
     var left = 'left';
+    var crate_red = 'crate_red'
+    var crate_green = 'crate_green'
+    var crate_blue = 'crate_blue'
+    var crate_yellow = 'crate_yellow'
     // Tools that are used in most levels:
     var BASE_TOOLS = [right, grab, left, prog1, prog2, prog3, prog4];
     var ALL_TOOLS = BASE_TOOLS.concat(blue, red, green, yellow, empty, nonempty);
+    var EDITOR_TOOLS = ALL_TOOLS.concat(crate_red, crate_green, crate_blue, crate_yellow);
     // These get stored in _packs. The ordering is preserved.
     export var TUTORIALS: ILevelPack = new LevelPack('tutorials');
     export var EASY: ILevelPack = new LevelPack('easy');
@@ -1549,7 +1561,7 @@ module level {
       EDITOR, // Level's pack
       1, // Start platform of the grappler 
       [20, 14, 11], // Rating
-      BASE_TOOLS.concat(red, yellow, empty, nonempty), // available tools
+      EDITOR_TOOLS,
       [
         [yellow, red],
         [],

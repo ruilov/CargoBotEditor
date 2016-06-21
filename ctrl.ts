@@ -140,6 +140,9 @@ module ctrl {
     export interface IOnDropHandler {
         (tool: cmd.IInstruction, srcProg: number, srcReg: number, destProg: number, destReg: number): boolean;
     }
+    export interface IOnStageDropHandler {
+        (tool: cmd.IInstruction, platform: number): boolean;
+    }
     /** Callable for changes to the code. This is a redirected update-call. */
     export interface ICodeChangeHandler {
         (code: model.ICode, msg: model.msg.RegisterChanged): void;
@@ -434,6 +437,15 @@ module ctrl {
                     this.lvlEvent.fireLater(level.EventType.DROP);
                     return showSmoke
                 }); //setOnDropHandler
+
+            _view.setOnStageDropHandler(
+                (tool: cmd.IInstruction, platform: number) => {
+                    var level = _model.getLevel();
+                    var color = tool.toString().replace("crate_", "");
+                    level.addToPlatform(platform, color);
+                    _model.getCargo().reset();
+                    return true;
+                });
 
             _model.getCode().subscribe(this, (code: model.ICode, msg?: model.msg.RegisterChanged) => {
                 var oldCmd = msg.getOldCommand();

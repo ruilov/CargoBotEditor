@@ -494,6 +494,7 @@ module view {
         setOnDragHandler(h: ctrl.IOnDragHandler)
         /** Inject function for drop-event. */
         setOnDropHandler(h: ctrl.IOnDropHandler)
+        setOnStageDropHandler(h: ctrl.IOnStageDropHandler)
         /** Inject function for play/stop-click-event. */
         setOnPlayClickHandler(h: ctrl.IClickHandler)
         /** Inject function for menu-click-event. */
@@ -591,6 +592,10 @@ module view {
         public tool_yellow: HTMLElement = null
         public tool_empty: HTMLElement = null
         public tool_nonempty: HTMLElement = null
+        public tool_crate_red: HTMLElement = null
+        public tool_crate_green: HTMLElement = null
+        public tool_crate_blue: HTMLElement = null
+        public tool_crate_yellow: HTMLElement = null
         public btn_clear: HTMLElement = null
 
         public prog_1: HTMLElement = null
@@ -721,6 +726,14 @@ module view {
         }
         public setOnDropHandler(h: ctrl.IOnDropHandler) {
             this.onDropHandler = h
+        }
+
+        private onStageDropHandler: ctrl.IOnStageDropHandler = () => {
+            console.log('Nothing injected yet...')
+            return false
+        }
+        public setOnStageDropHandler(h: ctrl.IOnStageDropHandler) {
+            this.onStageDropHandler = h
         }
 
         private isDnDAllowed: () => boolean = function () {
@@ -869,6 +882,7 @@ module view {
             var dropEvents = {
                 register: <shims.dnd.DNDListener>null,
                 gameplay: <shims.dnd.DNDListener>null,
+                stage: <shims.dnd.DNDListener>null,
                 out: <shims.dnd.DNDListener>null
             }
             dropEvents.register = (evt: shims.dnd.DNDEvent) => {
@@ -881,6 +895,12 @@ module view {
                     return;
                 }
                 var data = evt.getDataTransfer().getData('Text').split(',')
+                
+                if (data[0].lastIndexOf('crate', 0) == 0) {
+                    this.showSmoke(evt.getLeft(), evt.getTop());
+                    return; // these tools are to be dropped onto the stage only
+                }
+                
                 var item = cmd.getInstruction(data[0])
                 var srcProg = parseInt(data[1]) // 0 => Toolbox
                 var srcReg = parseInt(data[2])
@@ -898,6 +918,12 @@ module view {
                 }
 
                 var data = evt.getDataTransfer().getData('Text').split(',')
+                if(data[0].lastIndexOf('crate',0) == 0) {
+                    if (evt.getTarget().id == 'stage') dropEvents.stage(evt);
+                    else this.showSmoke(evt.getLeft(), evt.getTop());
+                    return;
+                }
+
                 var tool = cmd.getInstruction(data[0])
                 var srcProg: number = parseInt(data[1])
                 var srcReg: number = parseInt(data[2])
@@ -905,6 +931,14 @@ module view {
                 if (this.onDropHandler(tool, srcProg, srcReg, 0, 0))
                     this.showSmoke(evt.getLeft(), evt.getTop())
             }
+
+            dropEvents.stage = (evt: shims.dnd.DNDEvent) => {
+                var data = evt.getDataTransfer().getData('Text').split(',')
+                var tool = cmd.getInstruction(data[0]);
+                var plt = animation.ANIMATION.platformAtX(evt.getLeft());
+                if (plt >= 0) this.onStageDropHandler(tool, plt);
+                else this.showSmoke(evt.getLeft(), evt.getTop());
+            };
 
             // For some reson it will work anyway on mobile.
             // and registerDrop on "gameplay" would only disable all clickable buttons:

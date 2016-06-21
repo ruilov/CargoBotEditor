@@ -1078,6 +1078,19 @@ var animation;
                 this.lastTimeStamp = timestamp;
             }
         }; // animate
+        // calculates the index of the platform located at the given x coordinate (in pixels)
+        Animation.prototype.platformAtX = function (pixel_x) {
+            var meters_x = pixel_x * SIZE.ONE_PIXEL;
+            for (var pi = 0; pi < this.platforms.length; pi++) {
+                var plat = this.platforms[pi].GetBody();
+                var xpos = plat.GetPosition().x;
+                var w = plat.GetUserData().width;
+                if (meters_x >= xpos && meters_x <= xpos + w)
+                    return pi;
+            }
+            ;
+            return -1;
+        };
         /** Waiting for the next state... */
         Animation.STATE_NO_STATE = 0;
         Animation.ACTIVITY_NO_ACTIVITY = 0;
@@ -1215,6 +1228,10 @@ var cmd;
     cmd.EMPTY = new Condition("empty"); // aka "none"
     /** crate of any color. */
     cmd.NONEMPTY = new Condition("nonempty"); // aka "multi"
+    cmd.CRATE_RED = new Condition("crate_red");
+    cmd.CRATE_GREEN = new Condition("crate_green");
+    cmd.CRATE_BLUE = new Condition("crate_blue");
+    cmd.CRATE_YELLOW = new Condition("crate_yellow");
     var _cmds = {}; //Pool of existing Commands
     function getCommand(operation, condition) {
         var o = operation.toString();
@@ -1252,7 +1269,7 @@ var cmd;
             cmd.RIGHT, cmd.GRAB, cmd.LEFT,
             cmd.PROG1, cmd.PROG2, cmd.PROG3, cmd.PROG4,
             cmd.BLUE, cmd.RED, cmd.GREEN, cmd.YELLOW,
-            cmd.EMPTY, cmd.NONEMPTY
+            cmd.EMPTY, cmd.NONEMPTY, cmd.CRATE_RED, cmd.CRATE_GREEN, cmd.CRATE_BLUE, cmd.CRATE_YELLOW
         ].map(getTool);
     }
     cmd.getTools = getTools;
@@ -1749,6 +1766,13 @@ var ctrl;
                 _this.lvlEvent.fireLater(level.EventType.DROP);
                 return showSmoke;
             }); //setOnDropHandler
+            _view.setOnStageDropHandler(function (tool, platform) {
+                var level = _model.getLevel();
+                var color = tool.toString().replace("crate_", "");
+                level.addToPlatform(platform, color);
+                _model.getCargo().reset();
+                return true;
+            });
             _model.getCode().subscribe(this, function (code, msg) {
                 var oldCmd = msg.getOldCommand();
                 var newCmd = msg.getNewCommand();
@@ -2250,6 +2274,10 @@ var level;
             var index = list.indexOf(this);
             return list[index + 1];
         };
+        /** modifies this level by adding a new crate of given color to the top of the platform **/
+        Level.prototype.addToPlatform = function (platform, color) {
+            this.stage[platform].push(color);
+        };
         return Level;
     }());
     var _packs = new Array();
@@ -2299,9 +2327,14 @@ var level;
     var right = 'right';
     var grab = 'grab';
     var left = 'left';
+    var crate_red = 'crate_red';
+    var crate_green = 'crate_green';
+    var crate_blue = 'crate_blue';
+    var crate_yellow = 'crate_yellow';
     // Tools that are used in most levels:
     var BASE_TOOLS = [right, grab, left, prog1, prog2, prog3, prog4];
     var ALL_TOOLS = BASE_TOOLS.concat(blue, red, green, yellow, empty, nonempty);
+    var EDITOR_TOOLS = ALL_TOOLS.concat(crate_red, crate_green, crate_blue, crate_yellow);
     // These get stored in _packs. The ordering is preserved.
     level.TUTORIALS = new LevelPack('tutorials');
     level.EASY = new LevelPack('easy');
@@ -3631,8 +3664,7 @@ var level;
     level.EDITOR, // Level's pack
     1, // Start platform of the grappler 
     [20, 14, 11], // Rating
-    BASE_TOOLS.concat(red, yellow, empty, nonempty), // available tools
-    [
+    EDITOR_TOOLS, [
         [yellow, red],
         [],
         [red, yellow]
@@ -6562,6 +6594,10 @@ var view;
             this.tool_yellow = null;
             this.tool_empty = null;
             this.tool_nonempty = null;
+            this.tool_crate_red = null;
+            this.tool_crate_green = null;
+            this.tool_crate_blue = null;
+            this.tool_crate_yellow = null;
             this.btn_clear = null;
             this.prog_1 = null;
             this.prog_1_label = null;
@@ -6683,6 +6719,10 @@ var view;
                 console.log('Nothing injected yet...');
                 return false;
             };
+            this.onStageDropHandler = function () {
+                console.log('Nothing injected yet...');
+                return false;
+            };
             this.isDnDAllowed = function () {
                 return false;
             };
@@ -6757,6 +6797,7 @@ var view;
             var dropEvents = {
                 register: null,
                 gameplay: null,
+                stage: null,
                 out: null
             };
             dropEvents.register = function (evt) {
@@ -6769,6 +6810,10 @@ var view;
                     return;
                 }
                 var data = evt.getDataTransfer().getData('Text').split(',');
+                if (data[0].lastIndexOf('crate', 0) == 0) {
+                    _this.showSmoke(evt.getLeft(), evt.getTop());
+                    return; // these tools are to be dropped onto the stage only
+                }
                 var item = cmd.getInstruction(data[0]);
                 var srcProg = parseInt(data[1]); // 0 => Toolbox
                 var srcReg = parseInt(data[2]);
@@ -6784,11 +6829,27 @@ var view;
                     return;
                 }
                 var data = evt.getDataTransfer().getData('Text').split(',');
+                if (data[0].lastIndexOf('crate', 0) == 0) {
+                    if (evt.getTarget().id == 'stage')
+                        dropEvents.stage(evt);
+                    else
+                        _this.showSmoke(evt.getLeft(), evt.getTop());
+                    return;
+                }
                 var tool = cmd.getInstruction(data[0]);
                 var srcProg = parseInt(data[1]);
                 var srcReg = parseInt(data[2]);
                 // Destination is not a register which is referenced as 0,0.
                 if (_this.onDropHandler(tool, srcProg, srcReg, 0, 0))
+                    _this.showSmoke(evt.getLeft(), evt.getTop());
+            };
+            dropEvents.stage = function (evt) {
+                var data = evt.getDataTransfer().getData('Text').split(',');
+                var tool = cmd.getInstruction(data[0]);
+                var plt = animation.ANIMATION.platformAtX(evt.getLeft());
+                if (plt >= 0)
+                    _this.onStageDropHandler(tool, plt);
+                else
                     _this.showSmoke(evt.getLeft(), evt.getTop());
             };
             // For some reson it will work anyway on mobile.
@@ -6942,6 +7003,9 @@ var view;
         };
         GameplayView.prototype.setOnDropHandler = function (h) {
             this.onDropHandler = h;
+        };
+        GameplayView.prototype.setOnStageDropHandler = function (h) {
+            this.onStageDropHandler = h;
         };
         GameplayView.prototype.setDnDAllowedIndicator = function (f) {
             this.isDnDAllowed = f;

@@ -1281,6 +1281,19 @@ module animation {
                 this.lastTimeStamp = timestamp;
             }
         } // animate
+
+        // calculates the index of the platform located at the given x coordinate (in pixels)
+        platformAtX(pixel_x: number): number {
+            var meters_x = pixel_x * SIZE.ONE_PIXEL;
+            for (var pi = 0; pi < this.platforms.length; pi++) {
+                var plat = this.platforms[pi].GetBody();
+                var xpos = plat.GetPosition().x;
+                var w = plat.GetUserData().width;
+                if (meters_x >= xpos && meters_x <= xpos + w)
+                  return pi;
+            };
+            return -1;
+        }
     }
 
     export var ANIMATION: Animation = null;

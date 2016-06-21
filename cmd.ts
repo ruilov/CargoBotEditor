@@ -114,6 +114,11 @@
     /** crate of any color. */
     export var NONEMPTY: IInstruction = new Condition("nonempty"); // aka "multi"
 
+    export var CRATE_RED: IInstruction = new Condition("crate_red");
+    export var CRATE_GREEN: IInstruction = new Condition("crate_green");
+    export var CRATE_BLUE: IInstruction = new Condition("crate_blue");
+    export var CRATE_YELLOW: IInstruction = new Condition("crate_yellow");
+
     //////////////////////////////////////////////////////////////////
     export interface ICommand { //immutable
         getOperation(): IInstruction; // LEFT, GRAB, RIGHT, PROG[1-4]
@@ -156,7 +161,7 @@
             RIGHT, GRAB, LEFT,
             PROG1, PROG2, PROG3, PROG4,
             BLUE, RED, GREEN, YELLOW,
-            EMPTY, NONEMPTY
+            EMPTY, NONEMPTY, CRATE_RED, CRATE_GREEN, CRATE_BLUE, CRATE_YELLOW
         ].map(getTool)
     }
 

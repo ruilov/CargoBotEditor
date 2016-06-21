@@ -870,7 +870,7 @@ span {} #noscript {
     cursor: -webkit-grab;
     cursor: -moz-grab;
 }
-#tool_right {} #tool_grab {} #tool_left {} #tool_prog1 {} #tool_prog2 {} #tool_prog3 {} #tool_prog4 {} #tool_blue {} #tool_red {} #tool_green {} #tool_yellow {} #tool_empty {} #tool_nonempty {} .program > div > div {
+#tool_right {} #tool_grab {} #tool_left {} #tool_prog1 {} #tool_prog2 {} #tool_prog3 {} #tool_prog4 {} #tool_blue {} #tool_red {} #tool_green {} #tool_yellow {} #tool_empty {} #tool_nonempty {} #tool_nonempty {} #tool_crate_red {} #tool_crate_yellow {} #tool_crate_green {} #tool_crate_blue {}.program > div > div {
     -moz-transition: all 0.3s;
     -o-transition: all 0.3s;
     -webkit-transition: all 0.3s;
@@ -924,6 +924,19 @@ span {} #noscript {
 .cmd-nonempty {
     background: url('gfx/Condition_Any.png');
 }
+.cmd-crate-red {
+    background: url('gfx/Crate_Red_1.png');
+}
+.cmd-crate-green {
+    background: url('gfx/Crate_Green_1.png');
+}
+.cmd-crate-blue {
+    background: url('gfx/Crate_Blue_1.png');
+}
+.cmd-crate-yellow {
+    background: url('gfx/Crate_Yellow_1.png');
+}
+
 #play {
     width: 165px !important;
     height: 83px !important;
