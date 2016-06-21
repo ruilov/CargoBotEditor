@@ -143,6 +143,9 @@ module ctrl {
     export interface IOnStageDropHandler {
         (tool: cmd.IInstruction, platform: number): boolean;
     }
+    export interface IOnStageClickHandler {
+        (platform: number): boolean;
+    }
     /** Callable for changes to the code. This is a redirected update-call. */
     export interface ICodeChangeHandler {
         (code: model.ICode, msg: model.msg.RegisterChanged): void;
@@ -443,6 +446,13 @@ module ctrl {
                     var level = _model.getLevel();
                     var color = tool.toString().replace("crate_", "");
                     level.addToPlatform(platform, color);
+                    _model.getCargo().reset();
+                    return true;
+                });
+            _view.setOnStageClickHandler(
+                (platform: number) => {
+                    var level = _model.getLevel();
+                    level.removeFromPlatform(platform);
                     _model.getCargo().reset();
                     return true;
                 });

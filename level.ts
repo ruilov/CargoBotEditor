@@ -38,6 +38,7 @@ module level {
         getNextLevel(): ILevel;
         /** modifies this level by adding a new crate of given color to the top of the platform **/
         addToPlatform(platform: number, color: string);
+        removeFromPlatform(platform: number);
     }
     export interface IRating {
         /** Returns the number of stars (1 to 4). 
@@ -232,6 +233,10 @@ module level {
         /** modifies this level by adding a new crate of given color to the top of the platform **/
         addToPlatform(platform: number, color: string) {
             this.stage[platform].push(color);
+        }
+
+        removeFromPlatform(platform: number) {
+            this.stage[platform].pop();
         }
     }
     var _packs: ILevelPack[] = new Array();
@@ -1562,15 +1567,7 @@ module level {
       1, // Start platform of the grappler 
       [20, 14, 11], // Rating
       EDITOR_TOOLS,
-      [
-        [yellow, red],
-        [],
-        [red, yellow]
-      ], // start formation
-      [
-        [red, yellow],
-        [],
-        [yellow, red]
-      ] // goal formation
+      [[], [], [], [], [], [], [], []], // start formation
+      [[], [], [], [], [], [], [], []] // goal formation
     );
 }

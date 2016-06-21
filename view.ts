@@ -495,6 +495,7 @@ module view {
         /** Inject function for drop-event. */
         setOnDropHandler(h: ctrl.IOnDropHandler)
         setOnStageDropHandler(h: ctrl.IOnStageDropHandler)
+        setOnStageClickHandler(h: ctrl.IOnStageClickHandler)
         /** Inject function for play/stop-click-event. */
         setOnPlayClickHandler(h: ctrl.IClickHandler)
         /** Inject function for menu-click-event. */
@@ -736,6 +737,14 @@ module view {
             this.onStageDropHandler = h
         }
 
+        private onStageClickHandler: ctrl.IOnStageClickHandler = () => {
+            console.log('Nothing injected yet...')
+            return false
+        }
+        public setOnStageClickHandler(h: ctrl.IOnStageClickHandler) {
+            this.onStageClickHandler = h
+        }
+
         private isDnDAllowed: () => boolean = function () {
             return false
         }
@@ -932,6 +941,7 @@ module view {
                     this.showSmoke(evt.getLeft(), evt.getTop())
             }
 
+            // called when the user drops a crate tool onto the stage, to add a new crate to it
             dropEvents.stage = (evt: shims.dnd.DNDEvent) => {
                 var data = evt.getDataTransfer().getData('Text').split(',')
                 var tool = cmd.getInstruction(data[0]);
@@ -939,6 +949,12 @@ module view {
                 if (plt >= 0) this.onStageDropHandler(tool, plt);
                 else this.showSmoke(evt.getLeft(), evt.getTop());
             };
+
+            // called when the user clicks on the stage, looking to remove a crate from it
+            this.binding.stage.onclick = (e: MouseEvent) => {
+                var plt = animation.ANIMATION.platformAtX(e.x);
+                this.onStageClickHandler(plt);
+            }
 
             // For some reson it will work anyway on mobile.
             // and registerDrop on "gameplay" would only disable all clickable buttons:

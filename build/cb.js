@@ -1080,16 +1080,9 @@ var animation;
         }; // animate
         // calculates the index of the platform located at the given x coordinate (in pixels)
         Animation.prototype.platformAtX = function (pixel_x) {
-            var meters_x = pixel_x * SIZE.ONE_PIXEL;
-            for (var pi = 0; pi < this.platforms.length; pi++) {
-                var plat = this.platforms[pi].GetBody();
-                var xpos = plat.GetPosition().x;
-                var w = plat.GetUserData().width;
-                if (meters_x >= xpos && meters_x <= xpos + w)
-                    return pi;
-            }
-            ;
-            return -1;
+            // 95 doesn't seem to match the definitions in the SIZE object, but emprically works
+            var d = 95.0;
+            return Math.floor((pixel_x - d / 2) / d);
         };
         /** Waiting for the next state... */
         Animation.STATE_NO_STATE = 0;
@@ -1773,6 +1766,12 @@ var ctrl;
                 _model.getCargo().reset();
                 return true;
             });
+            _view.setOnStageClickHandler(function (platform) {
+                var level = _model.getLevel();
+                level.removeFromPlatform(platform);
+                _model.getCargo().reset();
+                return true;
+            });
             _model.getCode().subscribe(this, function (code, msg) {
                 var oldCmd = msg.getOldCommand();
                 var newCmd = msg.getNewCommand();
@@ -2277,6 +2276,9 @@ var level;
         /** modifies this level by adding a new crate of given color to the top of the platform **/
         Level.prototype.addToPlatform = function (platform, color) {
             this.stage[platform].push(color);
+        };
+        Level.prototype.removeFromPlatform = function (platform) {
+            this.stage[platform].pop();
         };
         return Level;
     }());
@@ -3664,16 +3666,8 @@ var level;
     level.EDITOR, // Level's pack
     1, // Start platform of the grappler 
     [20, 14, 11], // Rating
-    EDITOR_TOOLS, [
-        [yellow, red],
-        [],
-        [red, yellow]
-    ], // start formation
-    [
-        [red, yellow],
-        [],
-        [yellow, red]
-    ] // goal formation
+    EDITOR_TOOLS, [[], [], [], [], [], [], [], []], // start formation
+    [[], [], [], [], [], [], [], []] // goal formation
     );
 })(level || (level = {}));
 /*
@@ -6723,6 +6717,10 @@ var view;
                 console.log('Nothing injected yet...');
                 return false;
             };
+            this.onStageClickHandler = function () {
+                console.log('Nothing injected yet...');
+                return false;
+            };
             this.isDnDAllowed = function () {
                 return false;
             };
@@ -6843,6 +6841,7 @@ var view;
                 if (_this.onDropHandler(tool, srcProg, srcReg, 0, 0))
                     _this.showSmoke(evt.getLeft(), evt.getTop());
             };
+            // called when the user drops a crate tool onto the stage, to add a new crate to it
             dropEvents.stage = function (evt) {
                 var data = evt.getDataTransfer().getData('Text').split(',');
                 var tool = cmd.getInstruction(data[0]);
@@ -6851,6 +6850,11 @@ var view;
                     _this.onStageDropHandler(tool, plt);
                 else
                     _this.showSmoke(evt.getLeft(), evt.getTop());
+            };
+            // called when the user clicks on the stage, looking to remove a crate from it
+            this.binding.stage.onclick = function (e) {
+                var plt = animation.ANIMATION.platformAtX(e.x);
+                _this.onStageClickHandler(plt);
             };
             // For some reson it will work anyway on mobile.
             // and registerDrop on "gameplay" would only disable all clickable buttons:
@@ -7006,6 +7010,9 @@ var view;
         };
         GameplayView.prototype.setOnStageDropHandler = function (h) {
             this.onStageDropHandler = h;
+        };
+        GameplayView.prototype.setOnStageClickHandler = function (h) {
+            this.onStageClickHandler = h;
         };
         GameplayView.prototype.setDnDAllowedIndicator = function (f) {
             this.isDnDAllowed = f;

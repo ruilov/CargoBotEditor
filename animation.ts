@@ -1284,15 +1284,9 @@ module animation {
 
         // calculates the index of the platform located at the given x coordinate (in pixels)
         platformAtX(pixel_x: number): number {
-            var meters_x = pixel_x * SIZE.ONE_PIXEL;
-            for (var pi = 0; pi < this.platforms.length; pi++) {
-                var plat = this.platforms[pi].GetBody();
-                var xpos = plat.GetPosition().x;
-                var w = plat.GetUserData().width;
-                if (meters_x >= xpos && meters_x <= xpos + w)
-                  return pi;
-            };
-            return -1;
+            // 95 doesn't seem to match the definitions in the SIZE object, but emprically works
+            var d = 95.0
+            return Math.floor((pixel_x - d/2) / d);
         }
     }
 
