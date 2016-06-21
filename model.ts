@@ -208,10 +208,16 @@ module model {
         // chosen by fair dice rolls. guaranteed to be random.
         private pseudoRandom = [1, 2, 3, 2, 3, 1, 3, 1, 2];
         private lastIndex: number = -1;
+        private consta: boolean;
         reset() {
             this.lastIndex = -1;
+            this.consta = false;
+        }
+        constant() {
+            this.consta = true;
         }
         next() {
+            if (this.consta) return 1;
             this.lastIndex++;
             this.lastIndex %= this.pseudoRandom.length;
             return this.pseudoRandom[this.lastIndex];
@@ -373,6 +379,7 @@ module model {
             this.clear();
             this.grappler = this.lvl.getStartPlatform();
             prng.reset();
+            if (this.lvl.getTitle() == "Level Editor") prng.constant();
 
             var init = this.lvl.getInitialFormation();
             this.goal = this.lvl.getGoal();

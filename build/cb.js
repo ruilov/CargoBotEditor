@@ -4077,8 +4077,14 @@ var model;
         }
         PRNG.prototype.reset = function () {
             this.lastIndex = -1;
+            this.consta = false;
+        };
+        PRNG.prototype.constant = function () {
+            this.consta = true;
         };
         PRNG.prototype.next = function () {
+            if (this.consta)
+                return 1;
             this.lastIndex++;
             this.lastIndex %= this.pseudoRandom.length;
             return this.pseudoRandom[this.lastIndex];
@@ -4183,6 +4189,8 @@ var model;
             this.clear();
             this.grappler = this.lvl.getStartPlatform();
             prng.reset();
+            if (this.lvl.getTitle() == "Level Editor")
+                prng.constant();
             var init = this.lvl.getInitialFormation();
             this.goal = this.lvl.getGoal();
             for (var p = 0; p < init.length; p++) {
