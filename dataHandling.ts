@@ -56,7 +56,8 @@ module dataSaver {
             PartingTheSea: "Parting the Sea",
             TheTrick: "The Trick",
             Equalizer: "Equalizer",
-            TheEditor: "Level Editor"
+            TheEditor: "Level Editor",
+            EditorStage: "editor stage",
         },
         ratings: {
             tutorials: "rating[tutorials]",

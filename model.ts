@@ -562,6 +562,8 @@ module model {
         }
         save() {
             dataSaver.saveData(this.lvl.getTitle(), this.code.save());
+            if(this.lvl.getTitle()=="Level Editor") 
+                dataSaver.saveData("editor stage",this.lvl.dataToSave());
         }
 
         /** Get the rating (=amount of stars, 0 to 3). */
@@ -608,6 +610,9 @@ module model {
             if (lvl.getLevelPack() != this.pack) throw 'setLevel() can only be used if the Level-Pack is already set!'
             this.lvl = lvl;
             this.code.load(dataSaver.getData(lvl.getTitle()));
+            if (this.lvl.getTitle() == "Level Editor")
+                this.lvl.loadFromSaved(dataSaver.getData("editor stage"));
+
             this.setChanged();
             this.notify(new msg.ModelChanged(false, true, false, false));
         }

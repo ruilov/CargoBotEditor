@@ -1989,7 +1989,8 @@ var dataSaver;
             PartingTheSea: "Parting the Sea",
             TheTrick: "The Trick",
             Equalizer: "Equalizer",
-            TheEditor: "Level Editor"
+            TheEditor: "Level Editor",
+            EditorStage: "editor stage"
         },
         ratings: {
             tutorials: "rating[tutorials]",
@@ -2294,6 +2295,16 @@ var level;
             if (this.title != "Level Editor")
                 return;
             this.startPlatform = platform;
+        };
+        Level.prototype.dataToSave = function () {
+            return JSON.stringify({ 'stage': this.stage, 'startPlatform': this.startPlatform });
+        };
+        Level.prototype.loadFromSaved = function (data) {
+            var parsed = JSON.parse(data);
+            if ('stage' in parsed)
+                this.stage = parsed.stage;
+            if ('startPlatform' in parsed)
+                this.startPlatform = parsed.startPlatform;
         };
         return Level;
     }());
@@ -4334,6 +4345,8 @@ var model;
         };
         Model.prototype.save = function () {
             dataSaver.saveData(this.lvl.getTitle(), this.code.save());
+            if (this.lvl.getTitle() == "Level Editor")
+                dataSaver.saveData("editor stage", this.lvl.dataToSave());
         };
         /** Get the rating (=amount of stars, 0 to 3). */
         Model.prototype.getRating = function (lvl) {
@@ -4379,6 +4392,8 @@ var model;
                 throw 'setLevel() can only be used if the Level-Pack is already set!';
             this.lvl = lvl;
             this.code.load(dataSaver.getData(lvl.getTitle()));
+            if (this.lvl.getTitle() == "Level Editor")
+                this.lvl.loadFromSaved(dataSaver.getData("editor stage"));
             this.setChanged();
             this.notify(new msg.ModelChanged(false, true, false, false));
         };

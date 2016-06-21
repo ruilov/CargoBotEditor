@@ -40,6 +40,8 @@ module level {
         addToPlatform(platform: number, color: string);
         removeFromPlatform(platform: number);
         setClawPlatform(platform: number);
+        dataToSave();
+        loadFromSaved(data: string);
     }
     export interface IRating {
         /** Returns the number of stars (1 to 4). 
@@ -245,6 +247,16 @@ module level {
         setClawPlatform(platform: number) {
             if (this.title != "Level Editor") return;
             this.startPlatform = platform;
+        }
+
+        dataToSave() {
+            return JSON.stringify({ 'stage': this.stage, 'startPlatform': this.startPlatform });
+        }
+
+        loadFromSaved(data: string) {
+            var parsed = JSON.parse(data);
+            if('stage' in parsed) this.stage = parsed.stage;
+            if ('startPlatform' in parsed) this.startPlatform = parsed.startPlatform;
         }
     }
     var _packs: ILevelPack[] = new Array();
