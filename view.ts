@@ -496,6 +496,7 @@ module view {
         setOnDropHandler(h: ctrl.IOnDropHandler)
         setOnStageDropHandler(h: ctrl.IOnStageDropHandler)
         setOnStageClickHandler(h: ctrl.IOnStageClickHandler)
+        setOnNumHandler(h: ctrl.IOnNumHandler)
         /** Inject function for play/stop-click-event. */
         setOnPlayClickHandler(h: ctrl.IClickHandler)
         /** Inject function for menu-click-event. */
@@ -743,6 +744,13 @@ module view {
         }
         public setOnStageClickHandler(h: ctrl.IOnStageClickHandler) {
             this.onStageClickHandler = h
+        }
+        private onNumHandler: ctrl.IOnNumHandler = () => {
+            console.log('Nothing injected yet...')
+            return false
+        }
+        public setOnNumHandler(h: ctrl.IOnNumHandler) {
+            this.onNumHandler = h
         }
 
         private isDnDAllowed: () => boolean = function () {
@@ -1033,6 +1041,9 @@ module view {
             });
 
             $(document).keyup(function (e) {
+                if(e.keyCode >= 49 && e.keyCode <= 56) 
+                    _parent.onNumHandler(e.keyCode - 49);
+                
                 if (e.keyCode != 8 && e.keyCode != 37 && e.keyCode != 36)
                     return;
                 if ($('#gameplay').is(':visible') && e.keyCode != 36) {

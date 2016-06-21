@@ -146,6 +146,9 @@ module ctrl {
     export interface IOnStageClickHandler {
         (platform: number): boolean;
     }
+    export interface IOnNumHandler {
+        (platform: number): boolean;
+    }
     /** Callable for changes to the code. This is a redirected update-call. */
     export interface ICodeChangeHandler {
         (code: model.ICode, msg: model.msg.RegisterChanged): void;
@@ -453,6 +456,13 @@ module ctrl {
                 (platform: number) => {
                     var level = _model.getLevel();
                     level.removeFromPlatform(platform);
+                    _model.getCargo().reset();
+                    return true;
+                });
+            _view.setOnNumHandler(
+                (platform: number) => {
+                    var level = _model.getLevel();
+                    level.setClawPlatform(platform);
                     _model.getCargo().reset();
                     return true;
                 });

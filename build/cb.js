@@ -1772,6 +1772,12 @@ var ctrl;
                 _model.getCargo().reset();
                 return true;
             });
+            _view.setOnNumHandler(function (platform) {
+                var level = _model.getLevel();
+                level.setClawPlatform(platform);
+                _model.getCargo().reset();
+                return true;
+            });
             _model.getCode().subscribe(this, function (code, msg) {
                 var oldCmd = msg.getOldCommand();
                 var newCmd = msg.getNewCommand();
@@ -2275,10 +2281,19 @@ var level;
         };
         /** modifies this level by adding a new crate of given color to the top of the platform **/
         Level.prototype.addToPlatform = function (platform, color) {
+            if (this.title != "Level Editor")
+                return;
             this.stage[platform].push(color);
         };
         Level.prototype.removeFromPlatform = function (platform) {
+            if (this.title != "Level Editor")
+                return;
             this.stage[platform].pop();
+        };
+        Level.prototype.setClawPlatform = function (platform) {
+            if (this.title != "Level Editor")
+                return;
+            this.startPlatform = platform;
         };
         return Level;
     }());
@@ -3664,10 +3679,10 @@ var level;
     );
     level.THE_EDITOR = new Level('Level Editor', // Title of the level
     level.EDITOR, // Level's pack
-    1, // Start platform of the grappler 
+    0, // Start platform of the grappler 
     [20, 14, 11], // Rating
     EDITOR_TOOLS, [[], [], [], [], [], [], [], []], // start formation
-    [[], [], [], [], [], [], [], []] // goal formation
+    [[yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green]] // goal formation
     );
 })(level || (level = {}));
 /*
@@ -6721,6 +6736,10 @@ var view;
                 console.log('Nothing injected yet...');
                 return false;
             };
+            this.onNumHandler = function () {
+                console.log('Nothing injected yet...');
+                return false;
+            };
             this.isDnDAllowed = function () {
                 return false;
             };
@@ -6926,6 +6945,8 @@ var view;
                 view.switchTo(view.MAIN_MENU);
             });
             $(document).keyup(function (e) {
+                if (e.keyCode >= 49 && e.keyCode <= 56)
+                    _parent.onNumHandler(e.keyCode - 49);
                 if (e.keyCode != 8 && e.keyCode != 37 && e.keyCode != 36)
                     return;
                 if ($('#gameplay').is(':visible') && e.keyCode != 36) {
@@ -7013,6 +7034,9 @@ var view;
         };
         GameplayView.prototype.setOnStageClickHandler = function (h) {
             this.onStageClickHandler = h;
+        };
+        GameplayView.prototype.setOnNumHandler = function (h) {
+            this.onNumHandler = h;
         };
         GameplayView.prototype.setDnDAllowedIndicator = function (f) {
             this.isDnDAllowed = f;

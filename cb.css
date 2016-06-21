@@ -926,15 +926,19 @@ span {} #noscript {
 }
 .cmd-crate-red {
     background: url('gfx/Crate_Red_1.png');
+    width: 38px;
 }
 .cmd-crate-green {
     background: url('gfx/Crate_Green_1.png');
+    width: 38px;
 }
 .cmd-crate-blue {
     background: url('gfx/Crate_Blue_1.png');
+    width: 38px;
 }
 .cmd-crate-yellow {
     background: url('gfx/Crate_Yellow_1.png');
+    width: 38px;
 }
 
 #play {

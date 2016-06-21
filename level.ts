@@ -39,6 +39,7 @@ module level {
         /** modifies this level by adding a new crate of given color to the top of the platform **/
         addToPlatform(platform: number, color: string);
         removeFromPlatform(platform: number);
+        setClawPlatform(platform: number);
     }
     export interface IRating {
         /** Returns the number of stars (1 to 4). 
@@ -232,11 +233,18 @@ module level {
 
         /** modifies this level by adding a new crate of given color to the top of the platform **/
         addToPlatform(platform: number, color: string) {
+            if (this.title != "Level Editor") return;
             this.stage[platform].push(color);
         }
 
         removeFromPlatform(platform: number) {
+            if (this.title != "Level Editor") return;
             this.stage[platform].pop();
+        }
+
+        setClawPlatform(platform: number) {
+            if (this.title != "Level Editor") return;
+            this.startPlatform = platform;
         }
     }
     var _packs: ILevelPack[] = new Array();
@@ -1564,10 +1572,10 @@ module level {
     );
     export var THE_EDITOR: ILevel = new Level('Level Editor', // Title of the level
       EDITOR, // Level's pack
-      1, // Start platform of the grappler 
+      0, // Start platform of the grappler 
       [20, 14, 11], // Rating
       EDITOR_TOOLS,
       [[], [], [], [], [], [], [], []], // start formation
-      [[], [], [], [], [], [], [], []] // goal formation
+      [[yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green], [yellow, blue, red, green]] // goal formation
     );
 }
